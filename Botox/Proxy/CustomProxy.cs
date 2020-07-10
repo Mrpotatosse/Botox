@@ -57,20 +57,9 @@ namespace Botox.Proxy
                 ClientMessageInformation.Build(obj);
                 FakeClient.Send(obj);
 
-                Console.WriteLine($"[CLIENT]{(ClientMessageInformation.Splitted ? "Splitted-" : "")}{ClientMessageInformation.MessageJson}");
-                if (ClientMessageInformation.Parsed)
+                Console.WriteLine($"[CLIENT]{ClientMessageInformation.MessageJson}");
+                if (ClientMessageInformation.Parsed || ClientMessageInformation.MessageJson is null)
                     ClientMessageInformation.Clear();
-                /*if (ClientMessageInformation.Parsed)
-                {
-                    //FakeClient.Send(ClientMessageInformation.FullData);
-
-                    Console.WriteLine($"[Client]{ClientMessageInformation.MessageJson?.ToString() ?? $"no message found with id {ClientMessageInformation.ProtocolId}"}");
-                    ClientMessageInformation.Clear();
-                }
-                else
-                {
-                    Console.WriteLine($"[Client]Splitted");
-                }*/
             }
 
             private void Proxy_FakeClient_OnClientReceivedData(byte[] obj)
@@ -78,22 +67,9 @@ namespace Botox.Proxy
                 ServerMessageInformation.Build(obj);
                 Client.Send(obj);
 
-                Console.WriteLine($"[SERVER]{(ServerMessageInformation.Splitted ? "Splitted-" : "")}{ServerMessageInformation.MessageJson}");
-                if (ServerMessageInformation.Parsed)
+                Console.WriteLine($"[SERVER]{ServerMessageInformation.MessageJson}");
+                if (ServerMessageInformation.Parsed || ServerMessageInformation.MessageJson is null)
                     ServerMessageInformation.Clear();
-                /*if (ServerMessageInformation.Parsed)
-                {
-                    Console.WriteLine($"[Server]{ServerMessageInformation.MessageJson?.ToString() ?? $"no message found with id {ServerMessageInformation.ProtocolId}"}");
-                    ServerMessageInformation.Clear();
-                }
-                else if(ServerMessageInformation.Splitted)
-                {
-                    Console.WriteLine($"[Server]Splitted");
-                }
-                else
-                {
-                    ServerMessageInformation.Clear();
-                }*/
             }
         }
 

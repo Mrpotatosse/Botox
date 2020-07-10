@@ -45,7 +45,6 @@ namespace Botox.Protocol
         private int Offset { get; set; }
         public byte[] MessageData { get; private set; }
         public bool Parsed => MessageData?.Length  >= Length && MessageJson != null;
-        public bool Splitted => MessageData?.Length < Length && MessageJson != null;
         public ProtocolJsonElement MessageJson
         {
             get
@@ -74,16 +73,10 @@ namespace Botox.Protocol
                 {
                     MessageData = reader.ReadBytes((int)Length);
                 }
-
-                if(MessageJson is null)
+                else
                 {
-                    Console.WriteLine("Message not builded correctly");
-                    Clear();
-                }
-                else if(Length > 99999)
-                {
-                    Console.WriteLine($"Length {Length} out of limit");
-                    Clear();
+                    if(Length > 99999)
+                        Clear();
                 }
             }
         }
