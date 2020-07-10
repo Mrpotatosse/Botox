@@ -15,64 +15,6 @@ namespace Botox.Proxy
     //         https://louisabraham.github.io/LaBot/protocol.js
     public class CustomProxy : BaseServer<CustomClient>
     {
-        class ProxyElement
-        {
-            private readonly object ReceiverLock = new object();
-
-            public CustomClient Client { get; set; }
-            public CustomClient FakeClient { get; set; }
-            public IPEndPoint FakeClientRemoteIp { get; set; }
-
-            public MessageInformation ClientMessageInformation { get; set; }
-            public MessageInformation ServerMessageInformation { get; set; }
-
-            public void Init()
-            {
-                FakeClient.OnClientReceivedData += Proxy_FakeClient_OnClientReceivedData;
-                Client.OnClientReceivedData += Proxy_Client_OnClientReceivedData;
-
-                FakeClient.OnClientDisconnected += Proxy_FakeClient_OnClientDisconnected;
-                Client.OnClientDisconnected += Proxy_Client_OnClientDisconnected;
-
-                ClientMessageInformation = new MessageInformation(true);
-                ServerMessageInformation = new MessageInformation(false);
-
-                FakeClient.Connect(FakeClientRemoteIp);
-            }
-
-            private void Proxy_Client_OnClientDisconnected()
-            {
-                if(FakeClient.IsRunning)
-                    FakeClient.Disconnect();
-            }
-
-            private void Proxy_FakeClient_OnClientDisconnected()
-            {
-                if(Client.IsRunning)
-                    Client.Disconnect();
-            }
-
-            private void Proxy_Client_OnClientReceivedData(byte[] obj)
-            {
-                ClientMessageInformation.Build(obj);
-                FakeClient.Send(obj);
-
-                Console.WriteLine($"[CLIENT]{ClientMessageInformation.MessageJson}");
-                if (ClientMessageInformation.Parsed || ClientMessageInformation.MessageJson is null)
-                    ClientMessageInformation.Clear();
-            }
-
-            private void Proxy_FakeClient_OnClientReceivedData(byte[] obj)
-            {
-                ServerMessageInformation.Build(obj);
-                Client.Send(obj);
-
-                Console.WriteLine($"[SERVER]{ServerMessageInformation.MessageJson}");
-                if (ServerMessageInformation.Parsed || ServerMessageInformation.MessageJson is null)
-                    ServerMessageInformation.Clear();
-            }
-        }
-
         private IList<ProxyElement> Elements { get; set; }        
         public int ProcessId { get; private set; }
 
@@ -118,6 +60,64 @@ namespace Botox.Proxy
                 element.Client = obj;
                 element.Init();
             }
+        }
+    }
+
+    class ProxyElement
+    {
+        private readonly object ReceiverLock = new object();
+
+        public CustomClient Client { get; set; }
+        public CustomClient FakeClient { get; set; }
+        public IPEndPoint FakeClientRemoteIp { get; set; }
+
+        public MessageInformation ClientMessageInformation { get; set; }
+        public MessageInformation ServerMessageInformation { get; set; }
+
+        public void Init()
+        {
+            FakeClient.OnClientReceivedData += Proxy_FakeClient_OnClientReceivedData;
+            Client.OnClientReceivedData += Proxy_Client_OnClientReceivedData;
+
+            FakeClient.OnClientDisconnected += Proxy_FakeClient_OnClientDisconnected;
+            Client.OnClientDisconnected += Proxy_Client_OnClientDisconnected;
+
+            ClientMessageInformation = new MessageInformation(true);
+            ServerMessageInformation = new MessageInformation(false);
+
+            FakeClient.Connect(FakeClientRemoteIp);
+        }
+
+        private void Proxy_Client_OnClientDisconnected()
+        {
+            if (FakeClient.IsRunning)
+                FakeClient.Disconnect();
+        }
+
+        private void Proxy_FakeClient_OnClientDisconnected()
+        {
+            if (Client.IsRunning)
+                Client.Disconnect();
+        }
+
+        private void Proxy_Client_OnClientReceivedData(byte[] obj)
+        {
+            ClientMessageInformation.Build(obj);
+            FakeClient.Send(obj);
+
+            Console.WriteLine($"[CLIENT]{ClientMessageInformation.MessageJson}");
+            if (ClientMessageInformation.Parsed || ClientMessageInformation.MessageJson is null)
+                ClientMessageInformation.Clear();
+        }
+
+        private void Proxy_FakeClient_OnClientReceivedData(byte[] obj)
+        {
+            ServerMessageInformation.Build(obj);
+            Client.Send(obj);
+
+            Console.WriteLine($"[SERVER]{ServerMessageInformation.MessageJson}");
+            if (ServerMessageInformation.Parsed || ServerMessageInformation.MessageJson is null)
+                ServerMessageInformation.Clear();
         }
     }
 }
