@@ -11,11 +11,6 @@ using static BotoxNetwork.IO.DofusIO;
 
 namespace Botox.Protocol
 {
-    public class LabotJsonProtocol
-    {
-        public Dictionary<string, ProtocolJsonElement> Elements { get; set; }
-    }
-
     public class ProtocolManager : Singleton<ProtocolManager>
     {        
         public readonly ProtocolJsonElement[] Protocol;
