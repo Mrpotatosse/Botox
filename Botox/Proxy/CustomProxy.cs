@@ -85,7 +85,21 @@ namespace Botox.Proxy
             ClientMessageInformation = new MessageInformation(true);
             ServerMessageInformation = new MessageInformation(false);
 
+            ClientMessageInformation.OnMessageParsed += ClientMessageInformation_OnMessageParsed;
+            ServerMessageInformation.OnMessageParsed += ServerMessageInformation_OnMessageParsed;
+
             FakeClient.Connect(FakeClientRemoteIp);
+        }
+
+        private void ServerMessageInformation_OnMessageParsed(ProtocolJsonElement message)
+        {
+            Console.WriteLine($"[Server {FakeClient.RemoteIP}]{message}");
+
+        }
+
+        private void ClientMessageInformation_OnMessageParsed(ProtocolJsonElement message)
+        {
+            Console.WriteLine($"[Client {FakeClient.RemoteIP}]{message}");
         }
 
         private void Proxy_Client_OnClientDisconnected()
@@ -104,20 +118,12 @@ namespace Botox.Proxy
         {
             ClientMessageInformation.Build(obj);
             FakeClient.Send(obj);
-
-            Console.WriteLine($"[CLIENT]{ClientMessageInformation.MessageJson}");
-            if (ClientMessageInformation.Parsed || ClientMessageInformation.MessageJson is null)
-                ClientMessageInformation.Clear();
         }
 
         private void Proxy_FakeClient_OnClientReceivedData(byte[] obj)
         {
             ServerMessageInformation.Build(obj);
             Client.Send(obj);
-
-            Console.WriteLine($"[SERVER]{ServerMessageInformation.MessageJson}");
-            if (ServerMessageInformation.Parsed || ServerMessageInformation.MessageJson is null)
-                ServerMessageInformation.Clear();
         }
     }
 }

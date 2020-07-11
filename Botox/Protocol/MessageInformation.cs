@@ -10,6 +10,8 @@ namespace Botox.Protocol
 {
     public class MessageInformation
     {
+        public Action<ProtocolJsonElement> OnMessageParsed;
+
         // readonly property
         private readonly bool ClientSide;
         private BigEndianWriter Buffer { get; set; }
@@ -43,8 +45,9 @@ namespace Botox.Protocol
         }
 
         private int Offset { get; set; }
+        private bool Parsed { get; set; }
         public byte[] MessageData { get; private set; }
-        public bool Parsed => MessageData?.Length  >= Length && MessageJson != null;
+
         public ProtocolJsonElement MessageJson
         {
             get
@@ -72,11 +75,20 @@ namespace Botox.Protocol
                 if (Length <= reader.BytesAvailable)
                 {
                     MessageData = reader.ReadBytes((int)Length);
+
+                    OnMessageParsed?.Invoke(MessageJson);
+                    Clear();
+
+                    // write remnant data in buffer
+                    if (reader.BytesAvailable > 0)
+                    {
+                        byte[] nxt_data = reader.ReadBytes((int)reader.BytesAvailable);
+                        Build(nxt_data);
+                    }
                 }
-                else
+                else 
                 {
-                    if(Length > 99999)
-                        Clear();
+                    if (MessageJson is null || Length > 99999) Clear();
                 }
             }
         }
@@ -116,11 +128,11 @@ namespace Botox.Protocol
         public void Clear()
         {
             Header = null;
-            Length = 0;
             Offset = 0;
+            Length = 0;
             MessageData = new byte[0];
-            Buffer.Dispose();
+
             Buffer.Clear();
-        }   
+        }
     }
 }
