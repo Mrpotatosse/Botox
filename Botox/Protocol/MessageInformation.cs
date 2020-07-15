@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Botox.Extension;
+using Botox.Protocol.JsonField;
+using Botox.Proxy;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,129 +13,52 @@ namespace Botox.Protocol
 {
     public class MessageInformation
     {
-        public Action<ProtocolJsonElement> OnMessageParsed;
-
-        // readonly property
         private readonly bool ClientSide;
-        private BigEndianWriter Buffer { get; set; }
-        public byte[] FullData
-        {
-            get
-            {
-                return Buffer.Data;
-            }
-        }
+        private BigEndianReader Reader { get; set; }
+        public Buffer Information { get; set; }
 
-        // public property
-        public ushort? Header { get; set; } = null;
-        public uint? InstanceId { get; set; } = null;
-        public uint Length { get; set; } = 0;
-        public ushort? ProtocolId
-        {
-            get
-            {
-                if (Header is null) return null;
-                return (ushort)(Header >> 2);
-            }
-        }
-        public ushort? DynamicHeader
-        {
-            get
-            {
-                if (Header is null) return null;
-                return (ushort)(Header & 3);
-            }
-        }
-
-        private int Offset { get; set; }
-        private bool Parsed { get; set; }
-        public byte[] MessageData { get; private set; }
-
-        public ProtocolJsonElement MessageJson
-        {
-            get
-            {
-                if (ProtocolId is null) return null;
-                return ProtocolManager.Instance.Get(ProtocolId.Value);
-            }
-        }
+        public event Action<NetworkElementField, ProtocolJsonContent> OnMessageParsed;
         
         public MessageInformation(bool clientSide)
         {
-            Offset = 0;
-            Buffer = new BigEndianWriter();
             ClientSide = clientSide;
+            Reader = new BigEndianReader();
+            Information = new Buffer();
         }
 
-        public void Build(byte[] data)
+        public void InitBuild(byte[] data)
         {
-            Buffer.WriteBytes(data);
+            if (data.Length > 0)
+                Reader.Add(data, 0, data.Length);
 
-            using (BigEndianReader reader = new BigEndianReader(FullData))
+            if (Information.Build(Reader, ClientSide))
             {
-                ReadHeader(reader);
+                if (NetworkBase != null)
+                    OnMessageParsed?.Invoke(NetworkBase, Content);
 
-                if (Length <= reader.BytesAvailable)
-                {
-                    MessageData = reader.ReadBytes((int)Length);
+                Information = null;
+                Information = new Buffer();
 
-                    OnMessageParsed?.Invoke(MessageJson);
-                    Clear();
+                byte[] r = Reader.ReadBytes((int)Reader.BytesAvailable);
 
-                    // write remnant data in buffer
-                    if (reader.BytesAvailable > 0)
-                    {
-                        byte[] nxt_data = reader.ReadBytes((int)reader.BytesAvailable);
-                        Build(nxt_data);
-                    }
-                }
-                else 
-                {
-                    if (MessageJson is null || Length > 99999) Clear();
-                }
+                InitBuild(r);
+            }
+        }      
+
+        public NetworkElementField NetworkBase
+        {
+            get
+            {
+                return ProtocolManager.Instance.GetNetwork(x => x.protocolID == Information.MessageId);
             }
         }
 
-        private void ReadMessageLength(BigEndianReader reader)
+        private ProtocolJsonContent Content
         {
-            switch (DynamicHeader)
+            get
             {
-                case 1:
-                    Length = (uint)reader.ReadUnsignedByte(); return;
-                case 2:
-                    Length = reader.ReadUnsignedShort(); return;
-                case 3:
-                    Length = (uint)(((reader.ReadByte() & 255) << 16) + ((reader.ReadByte() & 255) << 8) + (reader.ReadByte() & 255)); return;
-                default: return;
+                return NetworkBase.Parse(new BigEndianReader(Information.Data));
             }
-        }
-
-        private void ReadHeader(BigEndianReader reader)
-        {
-            if (reader.BytesAvailable >= 2)
-            {
-                Header = reader.ReadUnsignedShort();
-
-                if (reader.BytesAvailable >= DynamicHeader)
-                {
-                    if (ClientSide)
-                    {
-                        InstanceId = reader.ReadUnsignedInt();
-                    }
-
-                    ReadMessageLength(reader);
-                }
-            }
-        }
-
-        public void Clear()
-        {
-            Header = null;
-            Offset = 0;
-            Length = 0;
-            MessageData = new byte[0];
-
-            Buffer.Clear();
         }
     }
 }

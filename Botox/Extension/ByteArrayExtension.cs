@@ -10,7 +10,7 @@ namespace Botox.Extension
     {
         public static string ToHexString(this byte[] byteArray)
         {
-            return BitConverter.ToString(byteArray).Replace("-", "");
-        }
+            return BitConverter.ToString(byteArray).Replace("-", " ");
+        }        
     }
 }

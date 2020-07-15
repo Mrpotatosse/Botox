@@ -139,7 +139,7 @@ namespace BotoxNetwork.IO
                 throw new Exception("Overflow varint : too much data");
             }
 
-            public uint ReadVarUInt()
+            public uint ReadVarUhInt()
             {
                 return unchecked((uint)ReadVarInt());
             }
@@ -169,7 +169,7 @@ namespace BotoxNetwork.IO
                 throw new Exception("Overflow varint : too much data");
             }
 
-            public ushort ReadVarUShort()
+            public ushort ReadVarUhShort()
             {
                 return unchecked((ushort)ReadVarShort());
             }
@@ -216,7 +216,7 @@ namespace BotoxNetwork.IO
                 return (low & 0xFFFFFFFF) | (long)high << 32;
             }
 
-            public ulong ReadVarULong()
+            public ulong ReadVarUhLong()
             {
                 return unchecked((ulong)ReadVarLong());
             }

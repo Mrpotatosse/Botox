@@ -1,8 +1,10 @@
 ﻿using Botox.Extension;
 using Botox.Protocol;
+using Botox.Protocol.JsonField;
 using BotoxNetwork.Server;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -15,8 +17,11 @@ namespace Botox.Proxy
     //         https://louisabraham.github.io/LaBot/protocol.js
     public class CustomProxy : BaseServer<CustomClient>
     {
-        private IList<ProxyElement> Elements { get; set; }        
+        private IList<ProxyElement> Elements { get; set; }
+
         public int ProcessId { get; private set; }
+
+        public static uint GLOBAL_INSTANCE_ID = 0;
 
         public CustomProxy(int serverPort, int processId) : base(serverPort)
         {
@@ -41,7 +46,7 @@ namespace Botox.Proxy
                 FakeClient = new CustomClient(),
                 FakeClientRemoteIp = remoteIp
             };
-
+            
             Elements.Add(element);
         }
 
@@ -58,15 +63,13 @@ namespace Botox.Proxy
             if(Elements.FirstOrDefault(x => x.Client is null) is ProxyElement element)
             {
                 element.Client = obj;
-                element.Init();
+                element.Init();                
             }
         }
     }
 
     class ProxyElement
     {
-        private readonly object ReceiverLock = new object();
-
         public CustomClient Client { get; set; }
         public CustomClient FakeClient { get; set; }
         public IPEndPoint FakeClientRemoteIp { get; set; }
@@ -91,15 +94,14 @@ namespace Botox.Proxy
             FakeClient.Connect(FakeClientRemoteIp);
         }
 
-        private void ServerMessageInformation_OnMessageParsed(ProtocolJsonElement message)
+        private void ServerMessageInformation_OnMessageParsed(NetworkElementField obj, ProtocolJsonContent con)
         {
-            Console.WriteLine($"[Server {FakeClient.RemoteIP}]{message}");
-
+            Console.WriteLine($"[Server({FakeClient.RemoteIP})] {obj.name} ({obj.protocolID})\n{con}");
         }
 
-        private void ClientMessageInformation_OnMessageParsed(ProtocolJsonElement message)
+        private void ClientMessageInformation_OnMessageParsed(NetworkElementField obj, ProtocolJsonContent con)
         {
-            Console.WriteLine($"[Client {FakeClient.RemoteIP}]{message}");
+            Console.WriteLine($"[Client({FakeClient.RemoteIP})] {obj.name} ({obj.protocolID})\n{con}");
         }
 
         private void Proxy_Client_OnClientDisconnected()
@@ -116,13 +118,13 @@ namespace Botox.Proxy
 
         private void Proxy_Client_OnClientReceivedData(byte[] obj)
         {
-            ClientMessageInformation.Build(obj);
+            ClientMessageInformation.InitBuild(obj);
             FakeClient.Send(obj);
         }
 
         private void Proxy_FakeClient_OnClientReceivedData(byte[] obj)
         {
-            ServerMessageInformation.Build(obj);
+            ServerMessageInformation.InitBuild(obj);
             Client.Send(obj);
         }
     }

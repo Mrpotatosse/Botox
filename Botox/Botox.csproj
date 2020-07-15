@@ -14,7 +14,7 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +22,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -54,13 +56,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extension\ByteArrayExtension.cs" />
+    <Compile Include="Extension\ProtocolJsonExtension.cs" />
     <Compile Include="Extension\Singleton.cs" />
     <Compile Include="Hook\CustomHookInterface.cs" />
     <Compile Include="Hook\HookManager.cs" />
+    <Compile Include="Protocol\BotofuProtocolJson.cs" />
+    <Compile Include="Protocol\Buffer.cs" />
+    <Compile Include="Protocol\JsonField\Limits.cs" />
+    <Compile Include="Protocol\JsonField\ClassField.cs" />
+    <Compile Include="Protocol\JsonField\EnumerationField.cs" />
+    <Compile Include="Protocol\JsonField\NetworkElementField.cs" />
     <Compile Include="Protocol\MessageInformation.cs" />
-    <Compile Include="Protocol\ProtocolJson.cs" />
-    <Compile Include="Protocol\ProtocolJsonElement.cs" />
-    <Compile Include="Protocol\ProtocolJsonVar.cs" />
+    <Compile Include="Protocol\ProtocolJsonContent.cs" />
     <Compile Include="Protocol\ProtocolManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,7 +78,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Protocol\dofusprotocol.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BotoxNetwork\BotoxNetwork.csproj">

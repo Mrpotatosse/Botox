@@ -1,9 +1,11 @@
 ﻿using Botox.Extension;
+using Botox.Protocol.JsonField;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,23 +15,59 @@ namespace Botox.Protocol
 {
     public class ProtocolManager : Singleton<ProtocolManager>
     {        
-        public readonly ProtocolJsonElement[] Protocol;
+        public static readonly string JSON_PROTOCOL_LOCATION = "./updatedProtocol.json";
+        public static readonly string JSON_PROTOCOL_URL = "https://cldine.gitlab.io/-/protocol-autoparser/-/jobs/691246963/artifacts/protocol.json";
+        
+        public readonly BotofuProtocolJson Protocol;
+
+        private bool _isUpdated;
+        public void UpdateProtocol()
+        {
+            if (_isUpdated) return;
+
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    client.DownloadFile(JSON_PROTOCOL_URL, JSON_PROTOCOL_LOCATION);
+                }
+
+                _isUpdated = true;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine($"{e}");
+            }
+        }
+
+        private string JsonContent
+        {
+            get
+            {
+                return File.ReadAllText(JSON_PROTOCOL_LOCATION);
+            }
+        }
 
         public ProtocolManager()
         {
-            JObject json = Newtonsoft.Json.JsonConvert.DeserializeObject<JObject>(File.ReadAllText("./dofusprotocol.json"), new Newtonsoft.Json.JsonSerializerSettings() { Formatting = Newtonsoft.Json.Formatting.Indented });
-            Protocol = json.Children().Select(x => Newtonsoft.Json.JsonConvert.DeserializeObject<ProtocolJsonElement>(x.First.ToString())).ToArray();
+            if (!File.Exists(JSON_PROTOCOL_LOCATION))
+            {
+                UpdateProtocol();
+            }
+
+            Protocol = Newtonsoft.Json.JsonConvert.DeserializeObject<BotofuProtocolJson>(JsonContent, new Newtonsoft.Json.JsonSerializerSettings() { Formatting = Newtonsoft.Json.Formatting.Indented });
         }
 
-        public ProtocolJsonElement Get(int id, bool message = true)
+        public NetworkElementField GetNetwork(Func<NetworkElementField, bool> predicat, bool message = true)
         {
-            IEnumerable<ProtocolJsonElement> id_match = Protocol.Where(x => x.protocolId == id);
-            if(id_match.Count() > 1)
-            {
-                if (message) return id_match.FirstOrDefault(x => x.name.Replace("Message", "") != x.name);
-                else return id_match.FirstOrDefault(x => x.name.Replace("Message", "") == x.name);
-            }
-            return id_match.FirstOrDefault();
+            if (message)
+                return Protocol.messages.FirstOrDefault(predicat);
+            return Protocol.types.FirstOrDefault(predicat);
+        }
+
+        public EnumerationField GetEnum(string name)
+        {
+            return Protocol.enumerations.FirstOrDefault(x => x.name == name);
         }
     }
 }

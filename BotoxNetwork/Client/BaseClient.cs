@@ -29,8 +29,8 @@ namespace BotoxNetwork.Client
 
         public event Action<Exception> OnErrorHandled;
 
-        public IPEndPoint RemoteIP => ClientSocket.RemoteEndPoint as IPEndPoint;
-        public IPEndPoint LocalIP => ClientSocket.LocalEndPoint as IPEndPoint;
+        public IPEndPoint RemoteIP => ClientSocket?.RemoteEndPoint as IPEndPoint;
+        public IPEndPoint LocalIP => ClientSocket?.LocalEndPoint as IPEndPoint;
 
         public bool IsRunning
         {
