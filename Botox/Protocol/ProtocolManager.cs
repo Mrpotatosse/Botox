@@ -21,7 +21,7 @@ namespace Botox.Protocol
         public readonly BotofuProtocolJson Protocol;
 
         private bool _isUpdated;
-        public void UpdateProtocol()
+        public void UpdateProtocol(bool throwException = false)
         {
             if (_isUpdated) return;
 
@@ -33,9 +33,11 @@ namespace Botox.Protocol
                 }
 
                 _isUpdated = true;
+                Console.WriteLine($"Protocol is up-to-date");
             }
             catch(Exception e)
             {
+                if (throwException) throw;
                 Console.WriteLine($"{e}");
             }
         }
@@ -50,13 +52,36 @@ namespace Botox.Protocol
 
         public ProtocolManager()
         {
+            try
+            {
+                _ctorInit(ref Protocol);
+            }
+            catch (Exception e)
+            { 
+                if(e is WebException)
+                {
+                    Console.WriteLine($"No internet access found. Cannot download protocol.\nPRESS ANY KEY EXIST");
+                    Console.ReadKey();
+                    Environment.Exit(0);
+                }
+
+                while (!_isUpdated)
+                {
+                    File.Delete(JSON_PROTOCOL_LOCATION);
+                    _ctorInit(ref Protocol);
+                }
+            }
+        }
+        private void _ctorInit(ref BotofuProtocolJson protocol)
+        {
             if (!File.Exists(JSON_PROTOCOL_LOCATION))
             {
-                UpdateProtocol();
+                UpdateProtocol(true);
             }
 
-            Protocol = Newtonsoft.Json.JsonConvert.DeserializeObject<BotofuProtocolJson>(JsonContent, new Newtonsoft.Json.JsonSerializerSettings() { Formatting = Newtonsoft.Json.Formatting.Indented });
+            protocol = Newtonsoft.Json.JsonConvert.DeserializeObject<BotofuProtocolJson>(JsonContent, new Newtonsoft.Json.JsonSerializerSettings() { Formatting = Newtonsoft.Json.Formatting.Indented });
         }
+
 
         public NetworkElementField GetNetwork(Func<NetworkElementField, bool> predicat, bool message = true)
         {

@@ -110,5 +110,14 @@ namespace Botox.Protocol
             }
             return IsValid;
         }
+        
+        ~Buffer()
+        {
+            Header = null;
+            InstanceId = 0;
+            Length = null;
+            Data = null;
+            FullPacket = null;
+        }
     }
 }

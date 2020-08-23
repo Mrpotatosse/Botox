@@ -20,5 +20,16 @@ namespace Botox.Protocol.JsonField
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
         }
+
+        ~NetworkElementField()
+        {
+            fields = null;
+            name = null;
+            protocolID = -1;
+            super = null;
+            super_serialize = null;
+            supernamespace = null;
+            use_hash_function = false;
+        }
     }
 }
