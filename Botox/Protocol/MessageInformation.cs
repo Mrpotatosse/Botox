@@ -33,8 +33,9 @@ namespace Botox.Protocol
 
             if (Information.Build(Reader, ClientSide))
             {
-                if (NetworkBase != null)
-                    OnMessageParsed?.Invoke(NetworkBase, Content);
+
+                if (NetworkBase() is NetworkElementField field)
+                    OnMessageParsed?.Invoke(field, Content(field));
 
                 Information = null;
                 Information = new Buffer();
@@ -45,20 +46,20 @@ namespace Botox.Protocol
             }
         }      
 
-        public NetworkElementField NetworkBase
+        public NetworkElementField NetworkBase()
         {
-            get
-            {
+            //get
+            //{
                 return ProtocolManager.Instance.GetNetwork(x => x.protocolID == Information.MessageId);
-            }
+            //}
         }
 
-        private ProtocolJsonContent Content
+        private ProtocolJsonContent Content(NetworkElementField field)
         {
-            get
-            {
-                return NetworkBase.Parse(new BigEndianReader(Information.Data));
-            }
+            //get
+            //{
+                return field.Parse(new BigEndianReader(Information.Data));
+            //}
         }
     }
 }
