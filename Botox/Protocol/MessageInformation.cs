@@ -33,8 +33,6 @@ namespace Botox.Protocol
 
             if (Information.Build(Reader, ClientSide))
             {
-                Console.WriteLine($"INFO : {Information.Data.Length}");
-
                 if (NetworkBase() is NetworkElementField field)
                     OnMessageParsed?.Invoke(field, Content(field));
 
