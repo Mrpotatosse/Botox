@@ -98,6 +98,7 @@ namespace Botox.Proxy
 
         private void ServerMessageInformation_OnMessageParsed(NetworkElementField obj, ProtocolJsonContent con)
         {
+            CustomProxy.GLOBAL_INSTANCE_ID++;
             if (ConfigurationManager.Instance.Startup.show_message)
             {
                 Console.WriteLine($"[Server({FakeClient.RemoteIP})] {obj.name} ({obj.protocolID})");
@@ -111,9 +112,10 @@ namespace Botox.Proxy
 
         private void ClientMessageInformation_OnMessageParsed(NetworkElementField obj, ProtocolJsonContent con)
         {
+            CustomProxy.GLOBAL_INSTANCE_ID++;
             if (ConfigurationManager.Instance.Startup.show_message)
             {
-                Console.WriteLine($"[Server({FakeClient.RemoteIP})] {obj.name} ({obj.protocolID})");
+                Console.WriteLine($"[Client({FakeClient.RemoteIP})] (n°{ClientMessageInformation.Information.InstanceId}|{CustomProxy.GLOBAL_INSTANCE_ID}) {obj.name} ({obj.protocolID})");
                 if (ConfigurationManager.Instance.Startup.show_message_content)
                 {
                     Console.WriteLine($"{con}");
