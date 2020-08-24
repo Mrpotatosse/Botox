@@ -16,5 +16,11 @@ namespace Botox.Handler.Customs
         {
             Console.WriteLine($"Test : {content["requiredVersion"]}");
         }
+
+        [Handler(153)]
+        public void HandleCharacterSelectedSuccessMessage(CustomClient client, NetworkElementField message, ProtocolJsonContent content)
+        {
+            Console.WriteLine($"Character selected : {content["infos"]["name"]} {content["infos"]["level"]}");
+        }
     }
 }

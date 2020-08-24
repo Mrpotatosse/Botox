@@ -17,7 +17,7 @@ namespace Botox.Configuration
                 return GetConfig<StartupConfiguration>();
             }
         }
-
+        
         public T GetConfig<T>() where T : class, IConfigurationFile
         {
             T obj = Activator.CreateInstance<T>();

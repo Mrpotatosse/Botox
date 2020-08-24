@@ -20,7 +20,6 @@ namespace BotoxNetwork.Server
         public event Action<T> OnClientLeaved;
 
         public event Action<Exception> OnErrorHandled;
-        public event Action<IPAddress> OnForcingDetected;
 
         public bool IsRunning { get; private set; }
         public int Port { get; private set; }
@@ -90,26 +89,6 @@ namespace BotoxNetwork.Server
 
                 Clients.Add(client);
                 AcceptClient();
-
-                // limit same connexion  
-                /*if (Clients.Where(x => x.RemoteIP.Address.ToString() == client.RemoteIP.Address.ToString()).Count() >= 8)
-                {
-                    if (IpForce.ContainsKey(client.RemoteIP.Address))
-                    {
-                        // limit spam
-                        if (++IpForce[client.RemoteIP.Address] >= 100)
-                        {
-                            // action on forcing
-                            OnForcingDetected?.Invoke(client.RemoteIP.Address);
-                        }
-                    }
-                    else
-                    {
-                        IpForce.Add(client.RemoteIP.Address, 1);
-                    }
-                    client.Disconnect();
-                    return;
-                }*/
             }
             catch (Exception e)
             {
