@@ -8,4 +8,4 @@ Pour lancer un hook c'est juste : </br>
   
   - 10 instances : <pre><code class='language-cs'>HookManager.Instance.InitHook("VOTRE DOSSIER APP DOFUS", "./SocketHook.dll", 10); </code></pre> 
   
-  (il y a un delay 3 secondes entre chaque ouverture du client donc ne soyez pas surpris) </br> 
+  (il y a un delay 3 secondes entre chaque ouverture de client donc ne soyez pas surpris) </br> 
