@@ -92,7 +92,7 @@ namespace BotoxNetwork.Server
                 AcceptClient();
 
                 // limit same connexion  
-                if (Clients.Where(x => x.RemoteIP.Address.ToString() == client.RemoteIP.Address.ToString()).Count() >= 8)
+                /*if (Clients.Where(x => x.RemoteIP.Address.ToString() == client.RemoteIP.Address.ToString()).Count() >= 8)
                 {
                     if (IpForce.ContainsKey(client.RemoteIP.Address))
                     {
@@ -109,7 +109,7 @@ namespace BotoxNetwork.Server
                     }
                     client.Disconnect();
                     return;
-                }
+                }*/
             }
             catch (Exception e)
             {

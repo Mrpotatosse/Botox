@@ -1,4 +1,6 @@
-﻿using Botox.Extension;
+﻿using Botox.Configuration;
+using Botox.Extension;
+using Botox.Handler;
 using Botox.Protocol;
 using Botox.Protocol.JsonField;
 using BotoxNetwork.Server;
@@ -96,12 +98,28 @@ namespace Botox.Proxy
 
         private void ServerMessageInformation_OnMessageParsed(NetworkElementField obj, ProtocolJsonContent con)
         {
-            Console.WriteLine($"[Server({FakeClient.RemoteIP})] {obj.name} ({obj.protocolID})\n{con}");
+            if (ConfigurationManager.Instance.Startup.show_message)
+            {
+                Console.WriteLine($"[Server({FakeClient.RemoteIP})] {obj.name} ({obj.protocolID})");
+                if (ConfigurationManager.Instance.Startup.show_message_content)
+                {
+                    Console.WriteLine($"{con}");
+                }
+            }
+            HandlerManager.Instance.Handle((uint)obj.protocolID, FakeClient, con);
         }
 
         private void ClientMessageInformation_OnMessageParsed(NetworkElementField obj, ProtocolJsonContent con)
         {
-            Console.WriteLine($"[Client({FakeClient.RemoteIP})] {obj.name} ({obj.protocolID})\n{con}");
+            if (ConfigurationManager.Instance.Startup.show_message)
+            {
+                Console.WriteLine($"[Server({FakeClient.RemoteIP})] {obj.name} ({obj.protocolID})");
+                if (ConfigurationManager.Instance.Startup.show_message_content)
+                {
+                    Console.WriteLine($"{con}");
+                }
+            }
+            HandlerManager.Instance.Handle((uint)obj.protocolID, Client, con);
         }
 
         private void Proxy_Client_OnClientDisconnected()

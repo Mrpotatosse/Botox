@@ -55,9 +55,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigurationManager.cs" />
+    <Compile Include="Configuration\IConfigurationFile.cs" />
+    <Compile Include="Configuration\StartupConfiguration.cs" />
     <Compile Include="Extension\ByteArrayExtension.cs" />
+    <Compile Include="Extension\HandlerExtension.cs" />
     <Compile Include="Extension\ProtocolJsonExtension.cs" />
     <Compile Include="Extension\Singleton.cs" />
+    <Compile Include="Handler\Customs\CustomHandler.cs" />
+    <Compile Include="Handler\HandlerAttribute.cs" />
+    <Compile Include="Handler\HandlerManager.cs" />
+    <Compile Include="Handler\IMessageHandler.cs" />
     <Compile Include="Hook\CustomHookInterface.cs" />
     <Compile Include="Hook\HookManager.cs" />
     <Compile Include="Protocol\BotofuProtocolJson.cs" />
