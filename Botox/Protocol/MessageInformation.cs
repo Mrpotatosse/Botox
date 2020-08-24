@@ -55,7 +55,8 @@ namespace Botox.Protocol
 
         private ProtocolJsonContent Content(NetworkElementField field)
         {
-            return field.Parse(new BigEndianReader(Information.Data));
+            BigEndianReader reader = new BigEndianReader(Information.Data);
+            return field.Parse(ref reader);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Botox.Protocol.JsonField
         public string name { get; set; }
         public int protocolID { get; set; }
         public string super { get; set; }
-        public string super_serialize { get; set; }
+        public bool super_serialize { get; set; }
         public string supernamespace { get; set; }
         public bool use_hash_function { get; set; }
 
@@ -27,7 +27,7 @@ namespace Botox.Protocol.JsonField
             name = null;
             protocolID = -1;
             super = null;
-            super_serialize = null;
+            super_serialize = false;
             supernamespace = null;
             use_hash_function = false;
         }

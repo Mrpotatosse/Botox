@@ -40,8 +40,10 @@ namespace Botox.Hook
             }
         }
 
-        public void InitHook(string exePath, string hookDllPath)
+        public void InitHook(string exePath, string hookDllPath, int instanceCount = 1)
         {
+            if (instanceCount <= 0) return;
+                       
             int port = Port;
 
             HookElement element = new HookElement();
@@ -69,6 +71,11 @@ namespace Botox.Hook
             {
                 PortUsedByProcess.Remove(process.Id);
             };
+
+            Task.Delay(TimeSpan.FromSeconds(3)).ContinueWith(task =>
+            {
+                InitHook(exePath, hookDllPath, instanceCount - 1);
+            });
         }
     }
 }

@@ -166,7 +166,7 @@ namespace BotoxNetwork.IO
                     }
                 }
 
-                throw new Exception("Overflow varint : too much data");
+                throw new Exception("Overflow varshort : too much data");
             }
 
             public ushort ReadVarUhShort()
