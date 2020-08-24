@@ -12,7 +12,7 @@ Pour lancer un hook c'est juste : </br>
 
 <h2> Configuration </h2>
 
-startup.json in exe path
+startup.json dans le dossier de l'éxécutable
 ```json
 {
   "dofus_location": "D:/DofusApp/Dofus.exe",
