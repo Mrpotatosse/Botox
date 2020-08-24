@@ -28,7 +28,7 @@ startup.json dans le dossier de l'éxécutable ( créer automatiquement lors de 
 voici un exemple de handler
 
 <pre><code class='language-cs'>
-public class CustomHandler : IMessageHandler
+    public class CustomHandler : IMessageHandler
     {
         [Handler(1)] // ici vous pouvez mettre soit l'id du message , soit le nom du message
         public void HandleProtocolRequiredMessage(CustomClient client, NetworkElementField message, ProtocolJsonContent content)
