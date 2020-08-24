@@ -38,4 +38,4 @@ voici un exemple de handler
     }
     </code></pre> 
 
-Votre class doit dériver de IMessageHandler , il n'y a pas de restriction sur le nom de votre fonction , mais celui doit respectez le même format que l'exemple un peu plus haut ( ne pas oublier l'attribut, et les arguments de la fonction )
+Votre class doit dériver de IMessageHandler , il n'y a pas de restriction sur le nom de votre fonction , mais celui-ci doit respectez le même format que l'exemple un peu plus haut ( ne pas oublier l'attribut, et les arguments de la fonction )
