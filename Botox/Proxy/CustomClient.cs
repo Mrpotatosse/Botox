@@ -41,19 +41,19 @@ namespace Botox.Proxy
 
         }
 
-        public void Send(string protocolName, ProtocolJsonContent content, bool clientSide = true)
+        public void Send(int processId, string protocolName, ProtocolJsonContent content, bool clientSide = true)
         {
             NetworkElementField message = ProtocolManager.Instance.Protocol[ProtocolKeyEnum.Messages, x => x.name == protocolName];
-            Send(message, content, clientSide);
+            Send(processId, message, content, clientSide);
         }
 
-        public void Send(int protocolId, ProtocolJsonContent content, bool clientSide = true)
+        public void Send(int processId, int protocolId, ProtocolJsonContent content, bool clientSide = true)
         {
             NetworkElementField message = ProtocolManager.Instance.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == protocolId];
-            Send(message, content, clientSide);
+            Send(processId, message, content, clientSide);
         }
 
-        public void Send(NetworkElementField message, ProtocolJsonContent content, bool clientSide)
+        public void Send(int processId, NetworkElementField message, ProtocolJsonContent content, bool clientSide)
         {
             if (message is null) return;
 
@@ -62,11 +62,11 @@ namespace Botox.Proxy
                 byte[] data = message.ToByte(content);
 
                 int cmpLen = _cmpLen(data.Length);
-                writer.WriteShort((short)((message.protocolID << 2) | cmpLen));                
-                CustomProxy.FAKE_MESSAGE_SENT++;
+                writer.WriteShort((short)((message.protocolID << 2) | cmpLen));
+                ProxyManager.Instance[processId].FAKE_MESSAGE_SENT++;
                 if (clientSide)
                 {
-                    writer.WriteUnsignedInt(CustomProxy.FAKE_MSG_INSTANCE_ID);
+                    writer.WriteUnsignedInt(ProxyManager.Instance[processId].FAKE_MSG_INSTANCE_ID);
                 }
                 switch (cmpLen)
                 {

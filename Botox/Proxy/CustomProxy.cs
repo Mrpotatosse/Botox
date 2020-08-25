@@ -1,5 +1,6 @@
 ﻿using Botox.Configuration;
 using Botox.Extension;
+using Botox.FastAction.Models.Actors;
 using Botox.Handler;
 using Botox.Protocol;
 using Botox.Protocol.JsonField;
@@ -19,15 +20,17 @@ namespace Botox.Proxy
     //         https://louisabraham.github.io/LaBot/protocol.js
     public class CustomProxy : BaseServer<CustomClient>
     {
+        public PlayerModel Selected { get; set; } 
+
         private IList<ProxyElement> Elements { get; set; }
 
         public int ProcessId { get; private set; }
 
-        public static uint FAKE_MESSAGE_SENT = 0;
-        public static uint LAST_GLOBAL_INSTANCE_ID = 0;
-        public static uint SERVER_MESSAGE_RCV = 0;
+        public uint FAKE_MESSAGE_SENT { get; set; } = 0;
+        public uint LAST_GLOBAL_INSTANCE_ID { get; set; } = 0;
+        public uint SERVER_MESSAGE_RCV { get; set; } = 0;
 
-        public static uint FAKE_MSG_INSTANCE_ID => FAKE_MESSAGE_SENT + LAST_GLOBAL_INSTANCE_ID + SERVER_MESSAGE_RCV;            
+        public uint FAKE_MSG_INSTANCE_ID => FAKE_MESSAGE_SENT + LAST_GLOBAL_INSTANCE_ID + SERVER_MESSAGE_RCV;            
 
         public CustomProxy(int serverPort, int processId) : base(serverPort)
         {
@@ -47,7 +50,7 @@ namespace Botox.Proxy
 
         public void AddClient(IPEndPoint remoteIp)
         {
-            ProxyElement element = new ProxyElement()
+            ProxyElement element = new ProxyElement(ProcessId)
             {
                 FakeClient = new CustomClient(),
                 FakeClientRemoteIp = remoteIp
@@ -74,7 +77,7 @@ namespace Botox.Proxy
         }
     }
 
-    class ProxyElement
+    public class ProxyElement
     {
         public CustomClient Client { get; set; }
         public CustomClient FakeClient { get; set; }
@@ -82,6 +85,13 @@ namespace Botox.Proxy
 
         public MessageInformation ClientMessageInformation { get; set; }
         public MessageInformation ServerMessageInformation { get; set; }
+
+        public int ProcessId { get; set; }
+
+        public ProxyElement(int processId)
+        {
+            ProcessId = processId;
+        }
 
         public void Init()
         {
@@ -102,7 +112,7 @@ namespace Botox.Proxy
 
         private void ServerMessageInformation_OnMessageParsed(NetworkElementField obj, ProtocolJsonContent con)
         {
-            CustomProxy.SERVER_MESSAGE_RCV++;
+            ProxyManager.Instance[ProcessId].SERVER_MESSAGE_RCV++;
             if (ConfigurationManager.Instance.Startup.show_message)
             {
                 Console.WriteLine($"[Server({FakeClient.RemoteIP})] {obj.name} ({obj.protocolID})");
@@ -117,14 +127,14 @@ namespace Botox.Proxy
             if (!check && diff >= 0)
                 Console.WriteLine($"SAME ? {check} [{diff}:({data[diff]},{ServerMessageInformation.Information.Data[diff]})] -> {obj.name}");*/
 
-            HandlerManager.Instance.Handle((uint)obj.protocolID, Client, FakeClient, con);
+            HandlerManager.Instance.Handle((uint)obj.protocolID, this, con);
         }
 
         private void ClientMessageInformation_OnMessageParsed(NetworkElementField obj, ProtocolJsonContent con)
-        {
-            CustomProxy.LAST_GLOBAL_INSTANCE_ID = ClientMessageInformation.Information.InstanceId;
-            CustomProxy.SERVER_MESSAGE_RCV = 0;
-            uint instance_id = ClientMessageInformation.Information.InstanceId + CustomProxy.FAKE_MESSAGE_SENT;
+        {            
+            ProxyManager.Instance[ProcessId].LAST_GLOBAL_INSTANCE_ID = ClientMessageInformation.Information.InstanceId;
+            ProxyManager.Instance[ProcessId].SERVER_MESSAGE_RCV = 0;
+            uint instance_id = ClientMessageInformation.Information.InstanceId + ProxyManager.Instance[ProcessId].FAKE_MESSAGE_SENT;
             if (ConfigurationManager.Instance.Startup.show_message)
             {
                 Console.WriteLine($"[Client({FakeClient.RemoteIP})] (n°{instance_id}) {obj.name} ({obj.protocolID})");
@@ -140,7 +150,7 @@ namespace Botox.Proxy
                 Console.WriteLine($"SAME ? {check} [{diff}:({data[diff]},{ClientMessageInformation.Information.Data[diff]})] -> {obj.name}");*/
             
             FakeClient.Send(ClientMessageInformation.Information.ReWriteInstanceId(instance_id));
-            HandlerManager.Instance.Handle((uint)obj.protocolID, Client, FakeClient ,con);
+            HandlerManager.Instance.Handle((uint)obj.protocolID, this, con);
         }
 
         private void Proxy_Client_OnClientDisconnected()
@@ -169,6 +179,16 @@ namespace Botox.Proxy
             ServerMessageInformation.InitBuild(obj);
             // forward message from server
             Client.Send(obj);
+        }
+
+        public void SendServer(dynamic value, ProtocolJsonContent content)
+        {
+            FakeClient.Send(ProcessId, value, content);
+        }
+
+        public void SendClient(dynamic value, ProtocolJsonContent content)
+        {
+            Client.Send(ProcessId, value, content, false);
         }
     }
 }

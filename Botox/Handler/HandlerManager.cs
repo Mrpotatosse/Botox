@@ -28,23 +28,23 @@ namespace Botox.Handler
             }
         }
 
-        public void Handle(uint protocolId, CustomClient dofusClient, CustomClient server, ProtocolJsonContent content)
+        public void Handle(uint protocolId, ProxyElement proxy, ProtocolJsonContent content)
         {
             MethodInfo method = _handlers.FirstOrDefault(x => x.GetCustomAttribute<HandlerAttribute>().ProtocolId == protocolId);
-            Handle(method, dofusClient, server, content);
+            Handle(method, proxy, content);
         }
 
-        public void Handle(string protocolName, CustomClient dofusClient, CustomClient server, ProtocolJsonContent content)
+        public void Handle(string protocolName, ProxyElement proxy, ProtocolJsonContent content)
         {
             MethodInfo method = _handlers.FirstOrDefault(x => x.GetCustomAttribute<HandlerAttribute>().ProtocolName == protocolName);
-            Handle(method, dofusClient, server, content);
+            Handle(method, proxy, content);
         }
 
-        private void Handle(MethodInfo method, CustomClient dofusClient, CustomClient server, ProtocolJsonContent content)
+        private void Handle(MethodInfo method, ProxyElement proxy, ProtocolJsonContent content)
         {
             if (method is null) return;
             object obj = Activator.CreateInstance(method.DeclaringType);
-            method.Invoke(obj, new object[] { dofusClient, server, method.GetCustomAttribute<HandlerAttribute>().Message, content });
+            method.Invoke(obj, new object[] { proxy, method.GetCustomAttribute<HandlerAttribute>().Message, content });
         }
     }
 }

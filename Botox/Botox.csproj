@@ -63,6 +63,8 @@
     <Compile Include="Extension\ProtocolJsonExtension.cs" />
     <Compile Include="Extension\Singleton.cs" />
     <Compile Include="FastAction\FastActionManager.cs" />
+    <Compile Include="FastAction\Models\Actors\ActorModel.cs" />
+    <Compile Include="FastAction\Models\Actors\PlayerModel.cs" />
     <Compile Include="Handler\Customs\CustomHandler.cs" />
     <Compile Include="Handler\HandlerAttribute.cs" />
     <Compile Include="Handler\HandlerManager.cs" />

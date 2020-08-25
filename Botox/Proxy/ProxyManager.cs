@@ -10,6 +10,14 @@ namespace Botox.Proxy
 {
     public class ProxyManager : Singleton<ProxyManager>
     {
+        public CustomProxy this[int processId]
+        {
+            get
+            {
+                return Proxys.FirstOrDefault(x => x.ProcessId == processId);
+            }
+        }
+
         private IList<CustomProxy> Proxys { get; set; } = new List<CustomProxy>();
         
         public void Redirect(IPEndPoint ip, int processId, int redirectionPort)
