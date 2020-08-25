@@ -32,11 +32,11 @@ voici un exemple de handler
     public class CustomHandler : IMessageHandler
     {
         [Handler(1)] // ici vous pouvez mettre soit l'id du message , soit le nom du message
-        public void HandleProtocolRequiredMessage(CustomClient client, NetworkElementField message, ProtocolJsonContent content)
+        public void HandleProtocolRequiredMessage(CustomClient dofusClient, CustomClient server, NetworkElementField message, ProtocolJsonContent content)
         {
             Console.WriteLine($"Test : {content["requiredVersion"]}");
         }
     }
     </code></pre> 
 
-Votre class doit dériver de IMessageHandler , il n'y a pas de restriction sur le nom de votre fonction , mais celui-ci doit respectez le même format que l'exemple un peu plus haut ( ne pas oublier l'attribut, et les arguments de la fonction )
+Votre class doit dériver de IMessageHandler , il n'y a pas de restriction sur le nom de votre fonction , mais celui-ci doit respectez le même format que l'exemple un peu plus haut ( ne pas oublier l'attribut, et les arguments de la fonction  )
