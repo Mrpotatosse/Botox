@@ -19,7 +19,8 @@ startup.json dans le dossier de l'éxécutable ( créer automatiquement lors de 
   "dll_location": "./SocketHook.dll",
   "client_count": 1,
   "show_message": true,
-  "show_message_content": false
+  "show_message_content": false,
+  "show_data": false,
 }
 ```
 
