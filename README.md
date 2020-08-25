@@ -21,6 +21,7 @@ startup.json dans le dossier de l'éxécutable ( créer automatiquement lors de 
   "show_message": true,
   "show_message_content": false,
   "show_data": false,
+  "show_fake_message_sent": true
 }
 ```
 
