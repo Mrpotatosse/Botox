@@ -31,7 +31,8 @@ voici un exemple de handler
 ```csharp
 public class CustomHandler : IMessageHandler
 {
-    [Handler(1)] // ici vous pouvez mettre soit l'id du message , soit le nom du message
+    // ici vous pouvez mettre soit l'id du message , soit le nom du message
+    [Handler(1)]
     // dofusClient représente le client local
     // server représente le faux client communicant avec le serveur Dofus
     public void HandleProtocolRequiredMessage(CustomClient dofusClient, CustomClient server, NetworkElementField message, ProtocolJsonContent content)
