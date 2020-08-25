@@ -33,9 +33,10 @@ public class CustomHandler : IMessageHandler
 {
     // ici vous pouvez mettre soit l'id du message , soit le nom du message
     [Handler(1)]
-    // dofusClient représente le client local
-    // server représente le faux client communicant avec le serveur Dofus
-    public void HandleProtocolRequiredMessage(CustomClient dofusClient, CustomClient server, NetworkElementField message, ProtocolJsonContent content)
+    // proxy element contient le client local ( Client ) et le client lié au serveur ( FakeClient )
+    // proxy.SendServer() -> envoyer un message au server
+    // proxy.SendClient() -> envoyer un message au client
+    public void HandleProtocolRequiredMessage(ProxyElement proxy, NetworkElementField message, ProtocolJsonContent content)
     {
         Console.WriteLine($"Test : {content["requiredVersion"]}");
     }
