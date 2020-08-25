@@ -28,7 +28,8 @@ startup.json dans le dossier de l'éxécutable ( créer automatiquement lors de 
 
 voici un exemple de handler
 
-<pre><code class='language-cs'>public class CustomHandler : IMessageHandler
+```csharp
+public class CustomHandler : IMessageHandler
 {
     [Handler(1)] // ici vous pouvez mettre soit l'id du message , soit le nom du message
     // dofusClient représente le client local
@@ -37,6 +38,6 @@ voici un exemple de handler
     {
         Console.WriteLine($"Test : {content["requiredVersion"]}");
     }
-}</code></pre> 
-
+}
+``` 
 Votre class doit dériver de IMessageHandler , il n'y a pas de restriction sur le nom de votre fonction , mais celui-ci doit respectez le même format que l'exemple un peu plus haut ( ne pas oublier l'attribut, et les arguments de la fonction  )
