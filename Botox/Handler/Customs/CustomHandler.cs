@@ -1,4 +1,5 @@
 ﻿using Botox.FastAction;
+using Botox.FastAction.Models.Actors;
 using Botox.Protocol;
 using Botox.Protocol.JsonField;
 using Botox.Proxy;
@@ -21,8 +22,14 @@ namespace Botox.Handler.Customs
         [Handler(153)]
         public void HandleCharacterSelectedSuccessMessage(ProxyElement proxy, NetworkElementField message, ProtocolJsonContent content)
         {
-            Console.WriteLine($"Character selected : {content["infos"]["name"]} {content["infos"]["level"]}");
+            ProxyManager.Instance[proxy.ProcessId].CharacterSelected = new PlayerModel()
+            {
+                Id = content["infos"]["id"],
+                Name = content["infos"]["name"],
+                Level = content["infos"]["level"]
+            };
 
+            Console.WriteLine($"{ProxyManager.Instance[proxy.ProcessId].CharacterSelected}");
         }
 
         [Handler(226)]

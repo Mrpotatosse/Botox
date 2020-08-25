@@ -20,7 +20,7 @@ namespace Botox.Proxy
     //         https://louisabraham.github.io/LaBot/protocol.js
     public class CustomProxy : BaseServer<CustomClient>
     {
-        public PlayerModel Selected { get; set; } 
+        public PlayerModel CharacterSelected { get; set; } 
 
         private IList<ProxyElement> Elements { get; set; }
 

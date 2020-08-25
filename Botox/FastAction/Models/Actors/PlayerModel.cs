@@ -9,6 +9,11 @@ namespace Botox.FastAction.Models.Actors
     public class PlayerModel : ActorModel
     {
         public string Name { get; set; }
-        public byte Level { get; set; }
+        public short Level { get; set; }
+
+        public override string ToString()
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
+        }
     }
 }
