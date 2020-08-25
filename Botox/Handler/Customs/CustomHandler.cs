@@ -27,7 +27,7 @@ namespace Botox.Handler.Customs
         [Handler(226)]
         public void HandleMapComplementaryInformationsDataMessage(CustomClient dofusClient, CustomClient server, NetworkElementField message, ProtocolJsonContent content)
         {
-            Task.Delay(TimeSpan.FromSeconds(10)).ContinueWith(task =>
+            Task.Delay(TimeSpan.FromSeconds(15)).ContinueWith(task =>
             {
                 FastActionManager.Instance.SendChatMessage(server, "CHANNEL_GLOBAL", "Hello World !");
             });

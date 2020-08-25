@@ -20,6 +20,8 @@ namespace Botox.Configuration
         public bool show_message_content { get; set; }
         public bool show_data { get; set; }
 
+        public bool show_fake_message_sent { get; set; }
+
         public StartupConfiguration()
         {
             dofus_location = "D:/DofusApp/Dofus.exe";
@@ -30,6 +32,8 @@ namespace Botox.Configuration
             show_message = true;
             show_message_content = false;
             show_data = false;
+
+            show_fake_message_sent = true;
         }
     }
 }
