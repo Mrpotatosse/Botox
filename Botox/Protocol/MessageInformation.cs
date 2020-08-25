@@ -50,7 +50,7 @@ namespace Botox.Protocol
 
         public NetworkElementField NetworkBase()
         {
-            return ProtocolManager.Instance.GetNetwork(x => x.protocolID == Information.MessageId);
+            return ProtocolManager.Instance.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == Information.MessageId];
         }
 
         private ProtocolJsonContent Content(NetworkElementField field)

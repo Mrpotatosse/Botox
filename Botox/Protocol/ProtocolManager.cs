@@ -20,10 +20,10 @@ namespace Botox.Protocol
         
         public readonly BotofuProtocolJson Protocol;
 
-        private bool _isUpdated;
-        public void UpdateProtocol(bool throwException = false)
+        private bool _update { get; set; } = false;
+        public bool UpdateProtocol(bool force = false)
         {
-            if (_isUpdated) return;
+            if (_update && !force) return true;
 
             try
             {
@@ -32,13 +32,14 @@ namespace Botox.Protocol
                     client.DownloadFile(JSON_PROTOCOL_URL, JSON_PROTOCOL_LOCATION);
                 }
 
-                _isUpdated = true;
                 Console.WriteLine($"Protocol is up-to-date");
+                _update = true;
+                return true;
             }
             catch(Exception e)
             {
-                if (throwException) throw;
                 Console.WriteLine($"{e}");
+                return false;
             }
         }
 
@@ -52,47 +53,31 @@ namespace Botox.Protocol
 
         public ProtocolManager()
         {
-            try
-            {
-                _ctorInit(ref Protocol);
-            }
-            catch (Exception e)
-            { 
-                if(e is WebException)
-                {
-                    Console.WriteLine($"No internet access found. Cannot download protocol.\nPRESS ANY KEY EXIST");
-                    Console.ReadKey();
-                    Environment.Exit(0);
-                }
-
-                while (!_isUpdated)
-                {
-                    File.Delete(JSON_PROTOCOL_LOCATION);
-                    _ctorInit(ref Protocol);
-                }
-            }
+            _ctorInit(ref Protocol);
         }
+
         private void _ctorInit(ref BotofuProtocolJson protocol)
         {
-            if (!File.Exists(JSON_PROTOCOL_LOCATION))
+            if (!UpdateProtocol() && !File.Exists(JSON_PROTOCOL_LOCATION))
             {
-                UpdateProtocol(true);
+                Console.WriteLine("protocol.json is missing and cannot be downloaded : frère paye ta co fait un effort xD");
+                Console.ReadKey();
+                Environment.Exit(0);
             }
 
             protocol = Newtonsoft.Json.JsonConvert.DeserializeObject<BotofuProtocolJson>(JsonContent, new Newtonsoft.Json.JsonSerializerSettings() { Formatting = Newtonsoft.Json.Formatting.Indented });
         }
 
-
-        public NetworkElementField GetNetwork(Func<NetworkElementField, bool> predicat, bool message = true)
+        public List<NetworkElementField> GetSuper(NetworkElementField field)
         {
-            if (message)
-                return Protocol.messages.FirstOrDefault(predicat);
-            return Protocol.types.FirstOrDefault(predicat);
-        }
+            List<NetworkElementField> result = new List<NetworkElementField>();
 
-        public EnumerationField GetEnum(string name)
-        {
-            return Protocol.enumerations.FirstOrDefault(x => x.name == name);
+            if (field.super != "NetworkMessage")
+            {
+                result.AddRange(GetSuper(Protocol[ProtocolKeyEnum.Messages, x => x.name == field.super]));
+            }
+
+            return result;
         }
     }
 }

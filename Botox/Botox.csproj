@@ -62,6 +62,7 @@
     <Compile Include="Extension\HandlerExtension.cs" />
     <Compile Include="Extension\ProtocolJsonExtension.cs" />
     <Compile Include="Extension\Singleton.cs" />
+    <Compile Include="FastAction\FastActionManager.cs" />
     <Compile Include="Handler\Customs\CustomHandler.cs" />
     <Compile Include="Handler\HandlerAttribute.cs" />
     <Compile Include="Handler\HandlerManager.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Protocol\JsonField\NetworkElementField.cs" />
     <Compile Include="Protocol\MessageInformation.cs" />
     <Compile Include="Protocol\ProtocolJsonContent.cs" />
+    <Compile Include="Protocol\ProtocolKeyEnum.cs" />
     <Compile Include="Protocol\ProtocolManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

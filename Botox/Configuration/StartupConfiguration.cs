@@ -18,6 +18,7 @@ namespace Botox.Configuration
 
         public bool show_message { get; set; }
         public bool show_message_content { get; set; }
+        public bool show_data { get; set; }
 
         public StartupConfiguration()
         {
@@ -26,8 +27,9 @@ namespace Botox.Configuration
 
             client_count = 1;
 
-            show_message = false;
+            show_message = true;
             show_message_content = false;
+            show_data = false;
         }
     }
 }

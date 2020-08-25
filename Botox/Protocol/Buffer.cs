@@ -55,6 +55,31 @@ namespace Botox.Protocol
 
         public byte[] FullPacket { get; set; }
 
+        /// <summary>
+        /// ONLY CLIENT SIDE !!!
+        /// </summary>
+        /// <param name="instanceId"></param>
+        /// <returns></returns>
+        public byte[] ReWriteInstanceId(uint instanceId)
+        {
+            using(BigEndianReader reader = new BigEndianReader(FullPacket))
+            {
+                using(BigEndianWriter writer = new BigEndianWriter())
+                {
+                    // header
+                    writer.WriteShort(reader.ReadShort());
+                    // instance id
+                    writer.WriteUnsignedInt(instanceId);
+                    // skip
+                    reader.ReadUnsignedInt();
+                    // len + data
+                    writer.WriteBytes(reader.ReadBytes((int)reader.BytesAvailable));
+
+                    return writer.Data;
+                }
+            }
+        }
+
         public bool Build(BigEndianReader reader, bool clientSide)
         {
             FullPacket = reader.Data;

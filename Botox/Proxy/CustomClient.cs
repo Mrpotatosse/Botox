@@ -1,10 +1,14 @@
-﻿using BotoxNetwork.Client;
+﻿using Botox.Extension;
+using Botox.Protocol;
+using Botox.Protocol.JsonField;
+using BotoxNetwork.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using static BotoxNetwork.IO.DofusIO;
 
 namespace Botox.Proxy
 {
@@ -34,6 +38,62 @@ namespace Botox.Proxy
         private void CustomClient_OnClientReceivedData(byte[] obj)
         {
 
+        }
+
+        public void Send(string protocolName, ProtocolJsonContent content, bool clientSide = true)
+        {
+            NetworkElementField message = ProtocolManager.Instance.Protocol[ProtocolKeyEnum.Messages, x => x.name == protocolName];
+            Send(message, content, clientSide);
+        }
+
+        public void Send(int protocolId, ProtocolJsonContent content, bool clientSide = true)
+        {
+            NetworkElementField message = ProtocolManager.Instance.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == protocolId];
+            Send(message, content, clientSide);
+        }
+
+        public void Send(NetworkElementField message, ProtocolJsonContent content, bool clientSide)
+        {
+            if (message is null) return;
+
+            using(BigEndianWriter writer = new BigEndianWriter())
+            {
+                byte[] data = message.ToByte(content);
+
+                int cmpLen = _cmpLen(data.Length);
+                writer.WriteShort((short)((message.protocolID << 2) | cmpLen));                
+                CustomProxy.FAKE_MESSAGE_SENT++;
+                if (clientSide)
+                {
+                    writer.WriteUnsignedInt(CustomProxy.FAKE_MSG_INSTANCE_ID);
+                }
+                switch (cmpLen)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        writer.WriteByte((byte)data.Length);
+                        break;
+                    case 2:
+                        writer.WriteShort((short)data.Length);
+                        break;
+                    case 3:
+                        writer.WriteByte((byte)((data.Length >> 16) & 255));
+                        writer.WriteShort((short)(data.Length & 65535));
+                        break;
+                }
+
+                writer.WriteBytes(data);
+                Send(writer.Data);
+            }
+        }
+
+        private int _cmpLen(int length)
+        {
+            if (length > 65535) return 3;
+            if (length > 255) return 2;
+            if (length > 0) return 1;
+            return 0;
         }
     }
 }

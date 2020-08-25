@@ -23,7 +23,11 @@ namespace Botox.Proxy
 
         public int ProcessId { get; private set; }
 
-        public static uint GLOBAL_INSTANCE_ID = 0;
+        public static uint FAKE_MESSAGE_SENT = 0;
+        public static uint LAST_GLOBAL_INSTANCE_ID = 0;
+        public static uint SERVER_MESSAGE_RCV = 0;
+
+        public static uint FAKE_MSG_INSTANCE_ID => FAKE_MESSAGE_SENT + LAST_GLOBAL_INSTANCE_ID + SERVER_MESSAGE_RCV;            
 
         public CustomProxy(int serverPort, int processId) : base(serverPort)
         {
@@ -98,7 +102,7 @@ namespace Botox.Proxy
 
         private void ServerMessageInformation_OnMessageParsed(NetworkElementField obj, ProtocolJsonContent con)
         {
-            CustomProxy.GLOBAL_INSTANCE_ID++;
+            CustomProxy.SERVER_MESSAGE_RCV++;
             if (ConfigurationManager.Instance.Startup.show_message)
             {
                 Console.WriteLine($"[Server({FakeClient.RemoteIP})] {obj.name} ({obj.protocolID})");
@@ -107,21 +111,36 @@ namespace Botox.Proxy
                     Console.WriteLine($"{con}");
                 }
             }
-            HandlerManager.Instance.Handle((uint)obj.protocolID, FakeClient, con);
+
+            /*byte[] data = obj.ToByte(con);
+            bool check = ServerMessageInformation.Information.Data.Same(data, out int diff, true);
+            if (!check && diff >= 0)
+                Console.WriteLine($"SAME ? {check} [{diff}:({data[diff]},{ServerMessageInformation.Information.Data[diff]})] -> {obj.name}");*/
+
+            HandlerManager.Instance.Handle((uint)obj.protocolID, Client, FakeClient, con);
         }
 
         private void ClientMessageInformation_OnMessageParsed(NetworkElementField obj, ProtocolJsonContent con)
         {
-            CustomProxy.GLOBAL_INSTANCE_ID++;
+            CustomProxy.LAST_GLOBAL_INSTANCE_ID = ClientMessageInformation.Information.InstanceId;
+            CustomProxy.SERVER_MESSAGE_RCV = 0;
+            uint instance_id = ClientMessageInformation.Information.InstanceId + CustomProxy.FAKE_MESSAGE_SENT;
             if (ConfigurationManager.Instance.Startup.show_message)
             {
-                Console.WriteLine($"[Client({FakeClient.RemoteIP})] (n°{ClientMessageInformation.Information.InstanceId}|{CustomProxy.GLOBAL_INSTANCE_ID}) {obj.name} ({obj.protocolID})");
+                Console.WriteLine($"[Client({FakeClient.RemoteIP})] (n°{instance_id}) {obj.name} ({obj.protocolID})");
                 if (ConfigurationManager.Instance.Startup.show_message_content)
                 {
                     Console.WriteLine($"{con}");
                 }
             }
-            HandlerManager.Instance.Handle((uint)obj.protocolID, Client, con);
+
+            /*byte[] data = obj.ToByte(con);
+            bool check = ClientMessageInformation.Information.Data.Same(data, out int diff);
+            if(!check)
+                Console.WriteLine($"SAME ? {check} [{diff}:({data[diff]},{ClientMessageInformation.Information.Data[diff]})] -> {obj.name}");*/
+            
+            FakeClient.Send(ClientMessageInformation.Information.ReWriteInstanceId(instance_id));
+            HandlerManager.Instance.Handle((uint)obj.protocolID, Client, FakeClient ,con);
         }
 
         private void Proxy_Client_OnClientDisconnected()
@@ -138,13 +157,17 @@ namespace Botox.Proxy
 
         private void Proxy_Client_OnClientReceivedData(byte[] obj)
         {
+            if (ConfigurationManager.Instance.Startup.show_data)
+                Console.WriteLine($"- - - - DATA len : ({obj.Length})- - - -\n{obj.ToHexString()}\n- - - - END DATA - - - -\n");
             ClientMessageInformation.InitBuild(obj);
-            FakeClient.Send(obj);
         }
 
         private void Proxy_FakeClient_OnClientReceivedData(byte[] obj)
         {
+            if (ConfigurationManager.Instance.Startup.show_data)
+                Console.WriteLine($"- - - - DATA len : ({obj.Length})- - - -\n{obj.ToHexString()}\n- - - - END DATA - - - -\n");
             ServerMessageInformation.InitBuild(obj);
+            // forward message from server
             Client.Send(obj);
         }
     }

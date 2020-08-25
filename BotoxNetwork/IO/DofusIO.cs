@@ -554,7 +554,7 @@ namespace BotoxNetwork.IO
                 }
             }
 
-            public void WriteVarUInt(uint @uint)
+            public void WriteVarUhInt(uint @uint)
             {
                 WriteVarInt(unchecked((int)@uint));
             }
@@ -581,7 +581,7 @@ namespace BotoxNetwork.IO
                 }
             }
 
-            public void WriteVarUShort(ushort @ushort)
+            public void WriteVarUhShort(ushort @ushort)
             {
                 WriteVarShort(unchecked((short)@ushort));
             }
@@ -620,7 +620,7 @@ namespace BotoxNetwork.IO
                 }
             }
 
-            public void WriteVarULong(ulong @ulong)
+            public void WriteVarUhLong(ulong @ulong)
             {
                 WriteVarLong(unchecked((long)@ulong));
             }
@@ -656,7 +656,7 @@ namespace BotoxNetwork.IO
             ///   Write a UShort into the buffer
             /// </summary>
             /// <returns></returns>
-            public void WriteUShort(ushort @ushort)
+            public void WriteUnsignedShort(ushort @ushort)
             {
                 WriteBigEndianBytes(BitConverter.GetBytes(@ushort));
             }
@@ -665,7 +665,7 @@ namespace BotoxNetwork.IO
             ///   Write a int into the buffer
             /// </summary>
             /// <returns></returns>
-            public void WriteUInt(UInt32 @uint)
+            public void WriteUnsignedInt(UInt32 @uint)
             {
                 WriteBigEndianBytes(BitConverter.GetBytes(@uint));
             }
@@ -674,7 +674,7 @@ namespace BotoxNetwork.IO
             ///   Write a long into the buffer
             /// </summary>
             /// <returns></returns>
-            public void WriteULong(UInt64 @ulong)
+            public void WriteUnsignedLong(UInt64 @ulong)
             {
                 WriteBigEndianBytes(BitConverter.GetBytes(@ulong));
             }
@@ -688,7 +688,7 @@ namespace BotoxNetwork.IO
                 m_writer.Write(@byte);
             }
 
-            public void WriteSByte(sbyte @byte)
+            public void WriteUnsignedByte(sbyte @byte)
             {
                 m_writer.Write(@byte);
             }
@@ -751,7 +751,7 @@ namespace BotoxNetwork.IO
             {
                 var bytes = Encoding.UTF8.GetBytes(str);
                 var len = (ushort)bytes.Length;
-                WriteUShort(len);
+                WriteUnsignedShort(len);
 
                 int i;
                 for (i = 0; i < len; i++)

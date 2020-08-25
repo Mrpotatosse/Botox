@@ -22,6 +22,7 @@ namespace Botox.Protocol.JsonField
         public int? boolean_byte_wrapper_position { get; set; }
         public int? constant_length { get; set; }
         public bool is_vector { get; set; }
+        public bool use_boolean_byte_wrapper { get; set; }
 
         ~ClassField()
         {
