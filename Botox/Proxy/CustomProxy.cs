@@ -137,7 +137,7 @@ namespace Botox.Proxy
             uint instance_id = ClientMessageInformation.Information.InstanceId + ProxyManager.Instance[ProcessId].FAKE_MESSAGE_SENT;
             if (ConfigurationManager.Instance.Startup.show_message)
             {
-                Console.WriteLine($"[Client({FakeClient.RemoteIP})] (n°{instance_id}) {obj.name} ({obj.protocolID})");
+                Console.WriteLine($"[Client({FakeClient.RemoteIP})] (n°{instance_id} | ({ClientMessageInformation.Information.InstanceId} + {ProxyManager.Instance[ProcessId].FAKE_MESSAGE_SENT})) {obj.name} ({obj.protocolID})");
                 if (ConfigurationManager.Instance.Startup.show_message_content)
                 {
                     Console.WriteLine($"{con}");
