@@ -9,5 +9,6 @@ namespace Botox.FastAction.Models.Actors
     public abstract class ActorModel
     {
         public long Id { get; set; } 
+        public double MapId { get; set; }
     }
 }

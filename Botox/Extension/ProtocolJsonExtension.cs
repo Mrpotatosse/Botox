@@ -50,8 +50,6 @@ namespace Botox.Extension
                         {
                             flags[_bool.position.Value] = BooleanByteWrapper.SetFlag(flags[_bool.position.Value], (byte)((_bool.boolean_byte_wrapper_position.Value - 1) % 8), content[_bool.name]);
                         }
-
-                        writer.WriteBytes(flags);
                     }
 
                     foreach (ClassField _var in vars)
@@ -73,8 +71,11 @@ namespace Botox.Extension
         {
             if (field.is_vector || field.type == "ByteArray")
             {
-                string write_len_method = field.write_length_method.Replace("write", "Write");
-                _writeMethod(write_len_method, value.Length, ref writer);
+                if (!field.constant_length.HasValue)
+                {
+                    string write_len_method = field.write_length_method.Replace("write", "Write");
+                    _writeMethod(write_len_method, value.Length, ref writer);
+                }
 
                 for(int i = 0; i < value.Length; i++)
                 {
@@ -168,6 +169,7 @@ namespace Botox.Extension
                 IEnumerable<ClassField> vars = field.fields.Where(x => !boolWrapper.Contains(x)).OrderBy(x => x.position);
 
                 byte flag = 0;
+                
                 for (byte i = 0;i<boolWrapper.Count();i++)
                 {
                     ClassField _bool = boolWrapper.ElementAt(i);
@@ -178,7 +180,7 @@ namespace Botox.Extension
                     content[_bool.name] = BooleanByteWrapper.GetFlag(flag, i);
                 }
 
-                foreach(ClassField _var in vars)
+                foreach (ClassField _var in vars)
                 {
                     content[_var.name] = _var.Parse(ref reader);
                 }

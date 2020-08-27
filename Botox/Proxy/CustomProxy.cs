@@ -122,11 +122,6 @@ namespace Botox.Proxy
                 }
             }
 
-            /*byte[] data = obj.ToByte(con);
-            bool check = ServerMessageInformation.Information.Data.Same(data, out int diff, true);
-            if (!check && diff >= 0)
-                Console.WriteLine($"SAME ? {check} [{diff}:({data[diff]},{ServerMessageInformation.Information.Data[diff]})] -> {obj.name}");*/
-
             HandlerManager.Instance.Handle((uint)obj.protocolID, this, con);
         }
 
@@ -143,11 +138,6 @@ namespace Botox.Proxy
                     Console.WriteLine($"{con}");
                 }
             }
-
-            /*byte[] data = obj.ToByte(con);
-            bool check = ClientMessageInformation.Information.Data.Same(data, out int diff);
-            if(!check)
-                Console.WriteLine($"SAME ? {check} [{diff}:({data[diff]},{ClientMessageInformation.Information.Data[diff]})] -> {obj.name}");*/
             
             FakeClient.Send(ClientMessageInformation.Information.ReWriteInstanceId(instance_id));
             HandlerManager.Instance.Handle((uint)obj.protocolID, this, con);

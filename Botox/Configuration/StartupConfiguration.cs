@@ -15,6 +15,7 @@ namespace Botox.Configuration
         public string dll_location { get; set; }
 
         public int client_count { get; set; }
+        public int time_wait_in_ms { get; set; }
 
         public bool show_message { get; set; }
         public bool show_message_content { get; set; }
@@ -28,6 +29,7 @@ namespace Botox.Configuration
             dll_location = "./SocketHook.dll";
 
             client_count = 1;
+            time_wait_in_ms = 3000;
 
             show_message = true;
             show_message_content = false;

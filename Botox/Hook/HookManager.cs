@@ -1,4 +1,5 @@
-﻿using Botox.Extension;
+﻿using Botox.Configuration;
+using Botox.Extension;
 using EasyHook;
 using SocketHook;
 using System;
@@ -72,7 +73,7 @@ namespace Botox.Hook
                 PortUsedByProcess.Remove(process.Id);
             };
 
-            Task.Delay(TimeSpan.FromSeconds(3)).ContinueWith(task =>
+            Task.Delay(TimeSpan.FromMilliseconds(ConfigurationManager.Instance.Startup.time_wait_in_ms)).ContinueWith(task =>
             {
                 InitHook(exePath, hookDllPath, instanceCount - 1);
             });

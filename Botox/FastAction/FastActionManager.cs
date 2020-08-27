@@ -19,12 +19,13 @@ namespace Botox.FastAction
             }
             else
             {
-                Console.WriteLine("Send chat error");
+                Console.WriteLine($"Send chat error : no channel '{channelName}' found");
             }
         }
 
         public void SendChatMessage(ProxyElement proxy, byte channel, string content)
         {
+            // ChatClientMultiMessage
             proxy.SendServer(861, new ProtocolJsonContent()
             {
                 fields =
@@ -33,6 +34,31 @@ namespace Botox.FastAction
                     { "content", content }
                 }
             });
+        }
+
+        public void SendPrivateChatMessage(ProxyElement proxy, string receiver, string content)
+        {
+            // ChatClientPrivateMessage
+            proxy.SendServer(851, new ProtocolJsonContent()
+            {
+                fields =
+                {
+                    { "receiver", receiver },
+                    { "content", content }
+                }
+            });
+        }
+
+        public void SendAcceptExchange(ProxyElement proxy)
+        {
+            // ExchangeAcceptMessage
+            proxy.SendServer(5508, new ProtocolJsonContent());
+        }
+
+        public void SendLeaveDialog(ProxyElement proxy)
+        {
+            // LeaveDialogRequestMessage
+            proxy.SendServer(5501, new ProtocolJsonContent());
         }
     }
 }
