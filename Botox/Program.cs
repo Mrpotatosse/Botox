@@ -45,17 +45,5 @@ namespace Botox
 
             Console.ReadLine();
         }
-        private static void InitUI()
-        {
-            Thread thread = new Thread(new ThreadStart(() =>
-            {
-                Application app = new Application();
-                app.Run(new MainWindow());
-            }));
-
-            thread.SetApartmentState(ApartmentState.STA);
-
-            thread.Start();
-        }
     }
 }
