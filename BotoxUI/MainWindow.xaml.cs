@@ -68,9 +68,10 @@ namespace BotoxUI
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private delegate void OpenDofus(int count);
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            OpenDofusAction?.Invoke(1);
+            await Dispatcher.BeginInvoke(new OpenDofus(OpenDofusAction), 1);
         }
 
         public void SetSelected(int id, PlayerModel model)
