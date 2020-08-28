@@ -3,8 +3,10 @@ using BotoxSharedModel.Models.Maps;
 using BotoxUI.Views;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,9 +43,9 @@ namespace BotoxUI
 
             if (Clients.ContainsKey(button.Id))
                 Clients.Remove(button.Id);
-
+                       
             Clients.Add(button.Id, new ClientPage());
-
+            
             LeftPanel.Items.Add(button);
         }
 
@@ -91,7 +93,7 @@ namespace BotoxUI
                         item.Text = model.Name;
                         Clients[id].SetCharacter(model);
                         if(item.IsSelected)
-                            MainFrame.Navigate(Clients[id]);
+                            MainFrame.Navigate(Clients[id]);                   
                     }
                     return;
                 }

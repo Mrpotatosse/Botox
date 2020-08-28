@@ -35,45 +35,80 @@ namespace Botox.UI
         private void Instance_OnPlayerEnterMap(PlayerModel obj)
         {
             int id = ProxyManager.Instance[x => x.CharacterSelected.MapId == obj.MapId];
-            UI.Dispatcher.Invoke(() =>
+            try
             {
-                UI.AddMapElement(id, obj);
-            });
+                UI.Dispatcher.Invoke(() =>
+                {
+                    UI.AddMapElement(id, obj);
+                });
+            }
+            catch (TaskCanceledException)
+            {
+
+            }
         }
 
         private void Instance_OnElementRemovedMap(double obj, double mapId)
         {
             int id = ProxyManager.Instance[x => x.CharacterSelected.MapId == mapId];
-            UI.Dispatcher.Invoke(() =>
+            try
             {
-                UI.RemoveMapElement(id, obj);
-            });
+                UI.Dispatcher.Invoke(() =>
+                {
+                    UI.RemoveMapElement(id, obj);
+                });
+            }
+            catch (TaskCanceledException)
+            {
+
+            }
         }
 
         private void Instance_OnSelectedEnterMap(MapModel obj)
         {
             int id = ProxyManager.Instance[x => obj.Actors.FirstOrDefault(v => v.Id == x.CharacterSelected.Id) != null];
-            UI.Dispatcher.Invoke(() =>
+            try
             {
-                UI.SetMap(id, obj);
-            });
+                UI.Dispatcher.Invoke(() =>
+                {
+                    UI.SetMap(id, obj);
+                });
+            }
+            catch(TaskCanceledException)
+            {
+
+            }
         }
 
         private void Instance_OnPlayerSelectedDisconnect(int obj)
         {
-            UI.Dispatcher.Invoke(() =>
+            try
             {
-                UI.SetSelected(obj, null);
-            });
+                UI.Dispatcher.Invoke(() =>
+                {
+                    UI.SetSelected(obj, null);
+                });
+            }
+            catch(TaskCanceledException)
+            {
+                // to do
+            }
         }
 
         private void Instance_OnPlayerSelected(PlayerModel obj)
         {
             int id = ProxyManager.Instance[obj.Name];
-            UI.Dispatcher.Invoke(() =>
+            try
             {
-                UI.SetSelected(id, obj);
-            });
+                UI.Dispatcher.Invoke(() =>
+                {
+                    UI.SetSelected(id, obj);
+                });
+            }
+            catch (TaskCanceledException)
+            {
+
+            }
         }
 
         public void Init()

@@ -13,26 +13,35 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Name="SelectedGrid">
-            <DockPanel Margin="5" DockPanel.Dock="Top">
-                <TextBlock>Id : </TextBlock>
-                <TextBlock Name="IdTxt">#Id</TextBlock>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Name="SelectedGrid">
+                <DockPanel Margin="5" DockPanel.Dock="Top">
+                    <TextBlock>Id :</TextBlock>
+                    <TextBlock Name="IdTxt">#Id</TextBlock>
+                </DockPanel>
+                <DockPanel Margin="5" DockPanel.Dock="Top">
+                    <TextBlock>Map Id :</TextBlock>
+                    <TextBlock Name="MapIdTxt">#mapid</TextBlock>
+                </DockPanel>
+                <DockPanel Margin="5" DockPanel.Dock="Top">
+                    <TextBlock>Name :</TextBlock>
+                    <TextBlock Name="NameTxt">#NAME</TextBlock>
+                </DockPanel>
+                <DockPanel Margin="5" DockPanel.Dock="Top">
+                    <TextBlock>Level :</TextBlock>
+                    <TextBlock Name="LevelTxt">#level</TextBlock>
+                </DockPanel>
             </DockPanel>
-            <DockPanel Margin="5" DockPanel.Dock="Top">
-                <TextBlock>Map Id : </TextBlock>
-                <TextBlock Name="MapIdTxt">#mapid</TextBlock>
-            </DockPanel>
-            <DockPanel Margin="5" DockPanel.Dock="Top">
-                <TextBlock>Name : </TextBlock>
-                <TextBlock Name="NameTxt">#NAME</TextBlock>
-            </DockPanel>
-            <DockPanel Margin="5" DockPanel.Dock="Top">
-                <TextBlock>Level : </TextBlock>
-                <TextBlock Name="LevelTxt">#level</TextBlock>
-            </DockPanel>
-        </DockPanel>
-        <ListBox Name="MapList" Grid.Column="1" Margin="5">
+            <ListBox Name="MapList" Grid.Row="1" Margin="5">
+
+            </ListBox>
+        </Grid>
+        <Grid Name="EaterGrid" Grid.Column="1">
             
-        </ListBox>
+        </Grid>
     </Grid>
 </Page>
