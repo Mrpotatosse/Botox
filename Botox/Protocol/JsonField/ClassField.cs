@@ -23,6 +23,7 @@ namespace Botox.Protocol.JsonField
         public int? constant_length { get; set; }
         public bool is_vector { get; set; }
         public bool use_boolean_byte_wrapper { get; set; }
+        public bool prefixed_by_type_id { get; set; }
 
         ~ClassField()
         {
@@ -38,7 +39,10 @@ namespace Botox.Protocol.JsonField
             bounds = null;
             boolean_byte_wrapper_position = null;
             constant_length = null;
+
+            use_boolean_byte_wrapper = false;
             is_vector = false;
+            prefixed_by_type_id = false;
         }
     }
 }

@@ -88,7 +88,7 @@ namespace Botox.Proxy
                 Send(writer.Data);
                 if (ConfigurationManager.Instance.Startup.show_fake_message_sent)
                 {
-                    Console.WriteLine($"Fake Message sent to ({RemoteIP}) : [{message.name} ({message.protocolID})]");
+                    Console.WriteLine($"Fake Message sent to ({RemoteIP}) : (n°{ProxyManager.Instance[processId].FAKE_MSG_INSTANCE_ID}) [{message.name} ({message.protocolID})]");
                     if (ConfigurationManager.Instance.Startup.show_message_content)
                     {
                         Console.WriteLine($"{content}");

@@ -1,10 +1,12 @@
 ﻿using Botox.Configuration;
 using Botox.Extension;
-using Botox.FastAction.Models.Actors;
+using Botox.FastAction;
+using Botox.FastAction.Models.Enums;
 using Botox.Handler;
 using Botox.Protocol;
 using Botox.Protocol.JsonField;
 using BotoxNetwork.Server;
+using BotoxSharedModel.Models.Actors;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,7 +22,7 @@ namespace Botox.Proxy
     //         https://louisabraham.github.io/LaBot/protocol.js
     public class CustomProxy : BaseServer<CustomClient>
     {
-        public PlayerModel CharacterSelected { get; set; } 
+        public PlayerModel CharacterSelected { get; set; }
 
         private IList<ProxyElement> Elements { get; set; }
 
@@ -64,6 +66,11 @@ namespace Botox.Proxy
             if(Elements.FirstOrDefault(x => x.Client == obj) is ProxyElement element)
             {
                 Elements.Remove(element);
+            }
+
+            if(Elements.Count == 0)
+            {
+                FastEventManager.Instance.Handle(FastEventEnum.PlayerSelectedDisconnect, ProcessId);
             }
         }
 
@@ -146,7 +153,9 @@ namespace Botox.Proxy
         private void Proxy_Client_OnClientDisconnected()
         {
             if (FakeClient.IsRunning)
+            {
                 FakeClient.Disconnect();
+            }
         }
 
         private void Proxy_FakeClient_OnClientDisconnected()

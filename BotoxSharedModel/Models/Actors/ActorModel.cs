@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Botox.FastAction.Models.Actors
+namespace BotoxSharedModel.Models.Actors
 {
     public abstract class ActorModel
     {
-        public long Id { get; set; } 
+        public double Id { get; set; } 
         public double MapId { get; set; }
     }
 }

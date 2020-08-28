@@ -136,7 +136,7 @@ namespace Botox.Extension
 
                 if (is_null) throw new Exception($"{var_type.name} cannot be null");
 
-                if(field.write_type_id_method is null || field.write_type_id_method is "")
+                if(!field.prefixed_by_type_id)
                 {
                     var_type = ProtocolManager.Instance.Protocol[ProtocolKeyEnum.Types, x => x.name == field.type];
                 }
@@ -242,7 +242,7 @@ namespace Botox.Extension
 
                 if (is_null) return null;
 
-                if (field.write_type_id_method is null || field.write_type_id_method is "")
+                if (!field.prefixed_by_type_id)
                 {
                     network_element = ProtocolManager.Instance.Protocol[ProtocolKeyEnum.Types, x => x.name == field.type];
                 }

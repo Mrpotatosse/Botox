@@ -1,5 +1,6 @@
 ﻿using Botox.Configuration;
 using Botox.Extension;
+using Botox.UI;
 using EasyHook;
 using SocketHook;
 using System;
@@ -46,7 +47,7 @@ namespace Botox.Hook
             if (instanceCount <= 0) return;
                        
             int port = Port;
-
+            
             HookElement element = new HookElement();
             {
                 element.IpcServer = RemoteHooking.IpcCreateServer<CustomHookInterface>(ref element.ChannelName, WellKnownObjectMode.Singleton);
@@ -71,7 +72,10 @@ namespace Botox.Hook
             process.Exited += (obj, arg) =>
             {
                 PortUsedByProcess.Remove(process.Id);
+                UIManager.Instance.RemovePage(process.Id);
             };
+
+            UIManager.Instance.OpenPage(process.Id);
 
             Task.Delay(TimeSpan.FromMilliseconds(ConfigurationManager.Instance.Startup.time_wait_in_ms)).ContinueWith(task =>
             {

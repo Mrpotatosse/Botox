@@ -18,6 +18,22 @@ namespace Botox.Proxy
             }
         }
 
+        public int this[Func<CustomProxy, bool> predicat]
+        {
+            get
+            {
+                return Proxys.FirstOrDefault(predicat).ProcessId;
+            }
+        }
+
+        public int this[string characterName]
+        {
+            get
+            {
+                return Proxys.FirstOrDefault(x => x.CharacterSelected.Name == characterName).ProcessId;
+            }
+        }
+
         private IList<CustomProxy> Proxys { get; set; } = new List<CustomProxy>();
         
         public void Redirect(IPEndPoint ip, int processId, int redirectionPort)

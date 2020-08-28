@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketHook", "SocketHook\So
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotoxNetwork", "BotoxNetwork\BotoxNetwork.csproj", "{0BE880C0-BC6D-4752-A21C-8ADB40C9CA75}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotoxUI", "BotoxUI\BotoxUI.csproj", "{7DAC7F0E-746C-43E2-A880-DD2EBDAA9746}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotoxSharedModel", "BotoxSharedModel\BotoxSharedModel.csproj", "{CBCDFABB-2F19-4F04-B960-D4EA81705FE3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{0BE880C0-BC6D-4752-A21C-8ADB40C9CA75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BE880C0-BC6D-4752-A21C-8ADB40C9CA75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BE880C0-BC6D-4752-A21C-8ADB40C9CA75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DAC7F0E-746C-43E2-A880-DD2EBDAA9746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DAC7F0E-746C-43E2-A880-DD2EBDAA9746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DAC7F0E-746C-43E2-A880-DD2EBDAA9746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DAC7F0E-746C-43E2-A880-DD2EBDAA9746}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBCDFABB-2F19-4F04-B960-D4EA81705FE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBCDFABB-2F19-4F04-B960-D4EA81705FE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBCDFABB-2F19-4F04-B960-D4EA81705FE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBCDFABB-2F19-4F04-B960-D4EA81705FE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

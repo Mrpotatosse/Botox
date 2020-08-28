@@ -38,12 +38,11 @@
     <Reference Include="EasyHook, Version=2.7.7097.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
       <HintPath>..\packages\EasyHook.2.7.7097\lib\net40\EasyHook.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.11.24.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.11.24\lib\Net45\HtmlAgilityPack.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Remoting" />
@@ -53,6 +52,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\ConfigurationManager.cs" />
@@ -62,10 +62,13 @@
     <Compile Include="Extension\HandlerExtension.cs" />
     <Compile Include="Extension\ProtocolJsonExtension.cs" />
     <Compile Include="Extension\Singleton.cs" />
+    <Compile Include="Extension\StringExtension.cs" />
     <Compile Include="FastAction\FastActionManager.cs" />
-    <Compile Include="FastAction\Models\Actors\ActorModel.cs" />
-    <Compile Include="FastAction\Models\Actors\PlayerModel.cs" />
+    <Compile Include="FastAction\FastEventManager.cs" />
+    <Compile Include="FastAction\Models\Enums\FastEventEnum.cs" />
+    <Compile Include="Handler\Customs\Characters\SelectionHandler.cs" />
     <Compile Include="Handler\Customs\CustomHandler.cs" />
+    <Compile Include="Handler\Customs\Maps\MapHandler.cs" />
     <Compile Include="Handler\HandlerAttribute.cs" />
     <Compile Include="Handler\HandlerManager.cs" />
     <Compile Include="Handler\IMessageHandler.cs" />
@@ -86,6 +89,7 @@
     <Compile Include="Proxy\CustomClient.cs" />
     <Compile Include="Proxy\CustomProxy.cs" />
     <Compile Include="Proxy\ProxyManager.cs" />
+    <Compile Include="UI\UIManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -95,6 +99,14 @@
     <ProjectReference Include="..\BotoxNetwork\BotoxNetwork.csproj">
       <Project>{0BE880C0-BC6D-4752-A21C-8ADB40C9CA75}</Project>
       <Name>BotoxNetwork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BotoxSharedModel\BotoxSharedModel.csproj">
+      <Project>{CBCDFABB-2F19-4F04-B960-D4EA81705FE3}</Project>
+      <Name>BotoxSharedModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BotoxUI\BotoxUI.csproj">
+      <Project>{7DAC7F0E-746C-43E2-A880-DD2EBDAA9746}</Project>
+      <Name>BotoxUI</Name>
     </ProjectReference>
     <ProjectReference Include="..\SocketHook\SocketHook.csproj">
       <Project>{EB3FCA74-D359-4356-AFA9-EA23709AE810}</Project>
