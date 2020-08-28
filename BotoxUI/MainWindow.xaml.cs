@@ -145,12 +145,15 @@ namespace BotoxUI
             Clients.Remove(id);
             CustomButton _btn = LeftPanel.Items.GetItemAt(i) as CustomButton;
 
-            if (_btn.IsSelected)
+            Dispatcher.Invoke(() =>
             {
-                MainFrame.Navigate(Home);
-            }
+                if (_btn.IsSelected)
+                {
+                    MainFrame.Navigate(Home);
+                }
 
-            LeftPanel.Items.RemoveAt(i);
+                LeftPanel.Items.RemoveAt(i);
+            });
         }
     }
 }

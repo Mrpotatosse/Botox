@@ -19,13 +19,13 @@ namespace Botox.Handler.Customs.Maps
         public void HandleMapComplementaryInformationsDataMessage(ProxyElement proxy, NetworkElementField message, ProtocolJsonContent content)
         {
             MapModel map = new MapModel() { MapId = content["mapId"] };
+            ProxyManager.Instance[proxy.ProcessId].CharacterSelected.MapId = map.MapId;
 
-            foreach(ProtocolJsonContent actor in content["actors"])
+            foreach (ProtocolJsonContent actor in content["actors"])
             {
-                ActorModel model = Parse(actor);
+                ActorModel model = Parse(actor, content["mapId"]);
                 if (model != null)
                 {
-                    model.MapId = content["mapId"];
                     map.Actors.Add(model);
                 }
             }
@@ -36,12 +36,11 @@ namespace Botox.Handler.Customs.Maps
         [Handler(5632)]
         public void HandleGameRolePlayShowActorMessage(ProxyElement proxy, NetworkElementField message, ProtocolJsonContent content)
         {
-            ActorModel model = Parse(content["informations"]);
+            double mapId = ProxyManager.Instance[proxy.ProcessId].CharacterSelected.MapId;
+            ActorModel model = Parse(content["informations"], mapId);
 
             if(model != null)
             {
-                double mapId = ProxyManager.Instance[proxy.ProcessId].CharacterSelected.MapId;
-                model.MapId = mapId;
                 FastEventManager.Instance.Handle(FastEventEnum.PlayerEnterMap, model);
             }
         }
@@ -54,7 +53,7 @@ namespace Botox.Handler.Customs.Maps
         }
 
 
-        private ActorModel Parse(ProtocolJsonContent content)
+        private ActorModel Parse(ProtocolJsonContent content, double mapId)
         {
             // GameRolePlayCharacterInformations or 
             // GameRolePlayMerchantInformations
@@ -69,7 +68,8 @@ namespace Botox.Handler.Customs.Maps
                     Id = content["contextualId"],
                     Level = level,
                     Name = content["name"],
-                    IsMerchant = content["protocol_id"] == 129
+                    IsMerchant = content["protocol_id"] == 129,
+                    MapId = mapId
                 };
             }
 

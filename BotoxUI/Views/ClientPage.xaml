@@ -19,15 +19,15 @@
                 <TextBlock Name="IdTxt">#Id</TextBlock>
             </DockPanel>
             <DockPanel Margin="5" DockPanel.Dock="Top">
-                <TextBlock>Map Id :</TextBlock>
+                <TextBlock>Map Id : </TextBlock>
                 <TextBlock Name="MapIdTxt">#mapid</TextBlock>
             </DockPanel>
             <DockPanel Margin="5" DockPanel.Dock="Top">
-                <TextBlock>Name :</TextBlock>
+                <TextBlock>Name : </TextBlock>
                 <TextBlock Name="NameTxt">#NAME</TextBlock>
             </DockPanel>
             <DockPanel Margin="5" DockPanel.Dock="Top">
-                <TextBlock>Level :</TextBlock>
+                <TextBlock>Level : </TextBlock>
                 <TextBlock Name="LevelTxt">#level</TextBlock>
             </DockPanel>
         </DockPanel>
