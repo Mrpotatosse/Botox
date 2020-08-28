@@ -8,7 +8,7 @@ Pour lancer un hook c'est juste : </br>
   
   - 10 instances : <pre><code class='language-cs'>HookManager.Instance.InitHook("VOTRE DOSSIER APP DOFUS", "./SocketHook.dll", 10); </code></pre> 
   
-  (il y a un delay 3 secondes entre chaque ouverture de client donc ne soyez pas surpris) </br> 
+  (vous pouvez définir le delay d'ouverture entre chaque client dans le fichier startup.json) </br> 
 
 <h2> Configuration </h2>
 
@@ -18,6 +18,7 @@ startup.json dans le dossier de l'éxécutable ( créer automatiquement lors de 
   "dofus_location": "D:/DofusApp/Dofus.exe",
   "dll_location": "./SocketHook.dll",
   "client_count": 1,
+  "time_wait_in_ms": 2000,
   "show_message": true,
   "show_message_content": false,
   "show_data": false,
