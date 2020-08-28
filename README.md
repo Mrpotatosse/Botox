@@ -22,7 +22,8 @@ startup.json dans le dossier de l'éxécutable ( créer automatiquement lors de 
   "show_message": true,
   "show_message_content": false,
   "show_data": false,
-  "show_fake_message_sent": true
+  "show_fake_message_sent": true,
+  "show_ui": false
 }
 ```
 
@@ -45,3 +46,7 @@ public class CustomHandler : IMessageHandler
 }
 ``` 
 Votre class doit dériver de IMessageHandler , il n'y a pas de restriction sur le nom de votre fonction , mais celui-ci doit respectez le même format que l'exemple un peu plus haut ( ne pas oublier l'attribut, et les arguments de la fonction  )
+
+<h2> Interface Graphique </h2>
+
+Pour l'instant l'interface graphique n'est qu'à ses bases , je compte y ajouter d'autres fonctionalité pour plus tard. Elle me permet juste de mieux voir certaine données pour l'instant.
