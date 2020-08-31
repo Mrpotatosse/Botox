@@ -1,5 +1,5 @@
 <h2># Botox</h2>
-dofus bot
+dofus bot ( nouvelle version : https://github.com/Mrpotatosse/BotoxCore )
 
 Petite explication : https://cadernis.fr/index.php?threads/botox-mitm.2551/#post-25639
 
